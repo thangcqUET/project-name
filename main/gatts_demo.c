@@ -32,7 +32,7 @@
 #include "esp_bt_main.h"
 #include "esp_bt_device.h"
 #include "esp_gatt_common_api.h"
-
+#include "epaper_interface.h"
 #include "sdkconfig.h"
 
 #define GATTS_TAG "GATTS_DEMO"
@@ -344,6 +344,18 @@ void example_write_event_env(esp_gatt_if_t gatts_if, prepare_type_env_t *prepare
         if (param->write.len == 4 && param->write.value[0] == 0xFF && param->write.value[1] == 0xFF && param->write.value[2] == 0xFF && param->write.value[3] == 0xFF) {
             // Complete the image data
             ESP_LOGI(GATTS_TAG, "Image data preparation complete");
+            // Here you can handle the complete image data, e.g., draw it on a display
+            if (image_data_len > 0) {
+                // Process the image data, e.g., send it to the display
+
+                epaper_draw_image(image_data, image_data_len);
+                // Reset the image data buffer for the next write
+                free(image_data);
+                image_data = NULL;
+                image_data_len = 0;
+            } else {
+                ESP_LOGE(GATTS_TAG, "No image data received");
+            }
         }else{
             //append the prepared data to image_data
             memcpy(image_data + image_data_len, param->write.value, param->write.len);
@@ -821,7 +833,7 @@ static void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_
     } while (0);
 }
 
-void app_main(void)
+void ble_app_start(void)
 {
     esp_err_t ret;
 
@@ -840,11 +852,11 @@ void app_main(void)
     ESP_ERROR_CHECK(esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT));
 
     esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
-    ret = esp_bt_controller_init(&bt_cfg);
-    if (ret) {
-        ESP_LOGE(GATTS_TAG, "%s initialize controller failed: %s", __func__, esp_err_to_name(ret));
-        return;
-    }
+    // ret = esp_bt_controller_init(&bt_cfg);
+    // if (ret) {
+    //     ESP_LOGE(GATTS_TAG, "%s initialize controller failed: %s", __func__, esp_err_to_name(ret));
+    //     return;
+    // }
 
     ret = esp_bt_controller_enable(ESP_BT_MODE_BLE);
     if (ret) {
