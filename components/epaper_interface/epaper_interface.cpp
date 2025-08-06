@@ -11,9 +11,10 @@ GxEPD2_BW<GxEPD2_420_GDEY042T81, GxEPD2_420_GDEY042T81::HEIGHT> display(GxEPD2_4
 extern "C" void epaper_draw_image(const uint8_t* image_data, uint16_t image_size) {
   if (!Serial) return;
   display.init(115200, true, 2, false);
-  display.setRotation(1);
+  // display.setRotation(1);
   display.setFullWindow();
   display.firstPage();
   display.fillScreen(GxEPD_BLACK);
   display.drawXBitmap(0, 0, image_data, 400, 300, GxEPD_WHITE);
+  display.nextPage();
 }
