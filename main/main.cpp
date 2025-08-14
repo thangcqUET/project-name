@@ -8,6 +8,7 @@ extern "C" void ble_app_start(void);
 
 #define SERVICE_UUID        "000000ff-0000-1000-8000-00805f9b34fb"
 #define CHARACTERISTIC_UUID "0000ff01-0000-1000-8000-00805f9b34fb"
+#define DEVICE_NAME "Khung ảnh E-Frame"
 
 // Callback class to handle client writes
 class MyCallbacks: public BLECharacteristicCallbacks {
@@ -117,7 +118,7 @@ extern "C" void app_main(){
   pinMode(21, OUTPUT);  // Example: DC pin
   pinMode(15, OUTPUT); // Example: CS pin
 
-  BLEDevice::init("Arduino");
+  BLEDevice::init(DEVICE_NAME);
   BLEServer *pServer = BLEDevice::createServer();
   
   // Set the server callback for connection events
