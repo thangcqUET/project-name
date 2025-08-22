@@ -1,6 +1,26 @@
 | Supported Targets | ESP32 | ESP32-C2 | ESP32-C3 | ESP32-C6 | ESP32-H2 | ESP32-S3 |
 | ----------------- | ----- | -------- | -------- | -------- | -------- | -------- |
 
+
+
+# Problem on ESP32-C3
+- It can not show log when use Serial.println() or ESP_LOGI
+  - To solve this, need to enable USB CDC on boot (on Arduino IDE)
+  - On esp-idf, we have to update flag on menuconfig: Component config → ESP System Settings → Channel for console output. Then select: "USB Serial/JTAG Controller" instead of UART0. It equivalent "USB CDC On Boot" in Arduino IDE
+  - But for esp-idf use Arduino component, we have to add few flag in CMakeLists.txt: 
+  ```cmake
+  add_compile_definitions(
+      "ARDUINO_USB_MODE=1"
+      "ARDUINO_USB_CDC_ON_BOOT=1"
+  )
+  ```
+  - Remember, this have to place before "project(project-name)" for it to work.
+  - And tada, it work!
+- Cannot use GPIO5 as a normal GPIO when USB is connected for flash and debug. At that time, it is used for JTAG.
+- When run this code without connecting screen, it will be shown watchdog because it have to wait for response from IPS screen.
+
+
+
 # ESP-IDF Gatt Server Example
 
 This example shows how create a GATT service by adding attributes one by one. However, this method is defined by Bluedroid and is difficult for users to use.

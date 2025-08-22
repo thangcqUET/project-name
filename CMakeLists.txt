@@ -3,5 +3,12 @@
 cmake_minimum_required(VERSION 3.16)
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+
+
+add_compile_definitions(
+    "ARDUINO_USB_MODE=1"
+    "ARDUINO_USB_CDC_ON_BOOT=1"
+)
+
 project(project-name)
 set(EXTRA_COMPONENT_DIRS components/arduino_libs components/epaper_interface)
