@@ -8,8 +8,8 @@ extern "C" void ble_app_start(void);
 
 #define SERVICE_UUID        "000000ff-0000-1000-8000-00805f9b34fb"
 #define CHARACTERISTIC_UUID "0000ff01-0000-1000-8000-00805f9b34fb"
-// #define DEVICE_NAME "Khung ảnh E-Frame"
-#define DEVICE_NAME "Khung ảnh của Hà"
+#define DEVICE_NAME "Khung ảnh E-Frame"
+// #define DEVICE_NAME "Khung ảnh của Hà"
 
 // Callback class to handle client writes
 class MyCallbacks: public BLECharacteristicCallbacks {
