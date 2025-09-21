@@ -8,8 +8,8 @@ extern "C" void ble_app_start(void);
 
 #define SERVICE_UUID        "000000ff-0000-1000-8000-00805f9b34fb"
 #define CHARACTERISTIC_UUID "0000ff01-0000-1000-8000-00805f9b34fb"
-#define DEVICE_NAME "Khung ảnh E-Frame"
-// #define DEVICE_NAME "Khung ảnh của Hà"
+// #define DEVICE_NAME "Khung ảnh E-Frame"
+#define DEVICE_NAME "Khung ảnh của Hà"
 
 // Callback class to handle client writes
 class MyCallbacks: public BLECharacteristicCallbacks {
@@ -40,6 +40,11 @@ class MyCallbacks: public BLECharacteristicCallbacks {
           (uint8_t)value[2] == 0xFF && 
           (uint8_t)value[3] == 0xFF) {
         
+        // remove data to 200x200 bits
+        if (imageData.size() > 5000) {
+          imageData.erase(imageData.begin() + 5000, imageData.end());
+          Serial.println("Image data truncated to 5000 bytes for 200x200 display");
+        }
         Serial.println("*** END MARKER RECEIVED ***");
         Serial.print("Image transfer complete! Total size: ");
         Serial.print(imageData.size());
@@ -113,10 +118,10 @@ extern "C" void app_main(){
   Serial.println("Starting BLE work!");
 
   // Initialize GPIO pins for e-paper display
-  pinMode(10, OUTPUT);  // Set GPIO 5 as output
+  pinMode(10, OUTPUT);  // Set GPIO 10 as output
   // Add other GPIO pins if needed for your e-paper display
-  pinMode(4, OUTPUT);  // Example: Reset pin
-  pinMode(21, OUTPUT);  // Example: DC pin
+  pinMode(5, OUTPUT);  // Example: Reset pin
+  pinMode(9, OUTPUT);  // Example: DC pin
   pinMode(2, OUTPUT); // Example: CS pin
 
   BLEDevice::init(DEVICE_NAME);
