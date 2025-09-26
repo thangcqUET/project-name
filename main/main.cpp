@@ -19,9 +19,9 @@ class MyCallbacks: public BLECharacteristicCallbacks {
     void onWrite(BLECharacteristic* pCharacteristic) {
       String value = pCharacteristic->getValue();
 
-      Serial.print("Received ");
-      Serial.print(value.length());
-      Serial.print(" bytes");
+      // Serial.print("Received ");
+      // Serial.print(value.length());
+      // Serial.print(" bytes");
       
       // Check if this is a write without response by examining the characteristic properties
       uint32_t properties = pCharacteristic->getProperties();
@@ -59,19 +59,20 @@ class MyCallbacks: public BLECharacteristicCallbacks {
       }
       
       // Add each byte to the image data vector
-      for (int i = 0; i < value.length(); i++) {
-        uint8_t byte = (uint8_t)value[i];
-        imageData.push_back(byte);
-        
-        // // Print in hex format with 0x prefix
-        // Serial.print("0x");
-        // if (byte < 16) Serial.print("0");
-        // Serial.print(byte, HEX);
-        // Serial.print(" ");
+      if (imageData.empty()) {
+        imageData.reserve(5000); // Reserve cho ảnh 200x200
       }
-      Serial.println();
-      Serial.print("Total image data size: ");
-      Serial.println(imageData.size());
+      
+      // Add bytes efficiently
+      size_t oldSize = imageData.size();
+      imageData.resize(oldSize + value.length());
+      memcpy(imageData.data() + oldSize, value.c_str(), value.length());
+      
+      if (imageData.size() % 1000 == 0 || imageData.size() > 4000) {
+        Serial.print("Total: ");
+        Serial.print(imageData.size());
+        Serial.println(" bytes");
+      }
     }
     
   public:
@@ -125,6 +126,9 @@ extern "C" void app_main(){
   pinMode(2, OUTPUT); // Example: CS pin
 
   BLEDevice::init(DEVICE_NAME);
+
+  BLEDevice::setMTU(512); // Set MTU to 512 bytes
+
   BLEServer *pServer = BLEDevice::createServer();
   
   // Set the server callback for connection events
@@ -149,7 +153,7 @@ extern "C" void app_main(){
   pAdvertising->addServiceUUID(SERVICE_UUID);
   pAdvertising->setScanResponse(true);
   pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
-  pAdvertising->setMinPreferred(0x12);
+  pAdvertising->setMaxPreferred(0x12);
   BLEDevice::startAdvertising();
   Serial.println("Characteristic defined! Now you can read it in your phone!");
   // ble_app_start();
