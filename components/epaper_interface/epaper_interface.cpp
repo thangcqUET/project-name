@@ -21,8 +21,8 @@
 // SPI pins cho ESP32-C3 (hardware SPI):
 // SCK  -> GPIO4  (hardware SPI clock) ngan
 // MOSI -> GPIO6  (hardware SPI data) dai
-// GxEPD2_BW<GxEPD2_420_GDEY042T81, GxEPD2_420_GDEY042T81::HEIGHT> display(GxEPD2_420_GDEY042T81(/*CS=5*/ CS_PIN, /*DC=*/ DC_PIN, /*RES=*/ RES_PIN, /*BUSY=*/ BUSY_PIN)); // 400x300, SSD1683
-GxEPD2_BW<GxEPD2_154_GDEY0154D67, GxEPD2_154_GDEY0154D67::HEIGHT> display(GxEPD2_154_GDEY0154D67(/*CS=D8*/ CS_PIN, /*DC=D3*/ DC_PIN, /*RST=D4*/ RES_PIN, /*BUSY=D2*/ BUSY_PIN)); // GDEW0154M09 200x200, JD79653A
+GxEPD2_BW<GxEPD2_420_GDEY042T81, GxEPD2_420_GDEY042T81::HEIGHT> display(GxEPD2_420_GDEY042T81(/*CS=5*/ CS_PIN, /*DC=*/ DC_PIN, /*RES=*/ RES_PIN, /*BUSY=*/ BUSY_PIN)); // 400x300, SSD1683
+// GxEPD2_BW<GxEPD2_154_GDEY0154D67, GxEPD2_154_GDEY0154D67::HEIGHT> display(GxEPD2_154_GDEY0154D67(/*CS=D8*/ CS_PIN, /*DC=D3*/ DC_PIN, /*RST=D4*/ RES_PIN, /*BUSY=D2*/ BUSY_PIN)); // GDEW0154M09 200x200, JD79653A
 
 
 extern "C" void epaper_draw_image(const uint8_t* image_data, uint16_t image_size) {
@@ -32,7 +32,7 @@ extern "C" void epaper_draw_image(const uint8_t* image_data, uint16_t image_size
   display.setFullWindow();
   display.firstPage();
   display.fillScreen(GxEPD_BLACK);
-  // display.drawXBitmap(0, 0, image_data, 400, 300, GxEPD_WHITE);
-  display.drawXBitmap(0, 0, image_data, 200, 200, GxEPD_WHITE);
+  display.drawXBitmap(0, 0, image_data, 400, 300, GxEPD_WHITE);
+  // display.drawXBitmap(0, 0, image_data, 200, 200, GxEPD_WHITE);
   display.nextPage();
 }

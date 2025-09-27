@@ -60,10 +60,10 @@ class MyCallbacks: public BLECharacteristicCallbacks {
           (uint8_t)value[2] == 0xFF && 
           (uint8_t)value[3] == 0xFF) {
         
-        // remove data to 200x200 bits
-        if (imageData.size() > 5000) {
-          imageData.erase(imageData.begin() + 5000, imageData.end());
-          Serial.println("Image data truncated to 5000 bytes for 200x200 display");
+        // remove data to 400x300 bits
+        if (imageData.size() > 15000) {
+          imageData.erase(imageData.begin() + 15000, imageData.end());
+          Serial.println("Image data truncated to 15000 bytes for 400x300 display");
         }
         Serial.println("*** END MARKER RECEIVED ***");
         Serial.print("Image transfer complete! Total size: ");
@@ -80,7 +80,7 @@ class MyCallbacks: public BLECharacteristicCallbacks {
       
       // Add each byte to the image data vector
       if (imageData.empty()) {
-        imageData.reserve(5000); // Reserve cho ảnh 200x200
+        imageData.reserve(15000); // Reserve cho ảnh 400x300
       }
       
       // Add bytes efficiently
