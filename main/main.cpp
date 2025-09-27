@@ -141,6 +141,8 @@ class MyServerCallbacks: public BLEServerCallbacks {
     void onDisconnect(BLEServer* pServer) {
       Serial.println("Client disconnected - Returning to light sleep");
       
+      // Reset activity timer on disconnect
+      lastActivityTime = millis();
       // Update connection state
       isConnected = false;
       
