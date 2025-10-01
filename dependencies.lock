@@ -329,7 +329,7 @@ dependencies:
       type: service
     version: 1.2.0
   espressif/esp_secure_cert_mgr:
-    component_hash: 95b490db6944b2a6b32d7af172bb52e5045fe1d37ac8e00f9edfdd0535d64f72
+    component_hash: 47589860736b456608035b06d88e6a5dab566419fa8737a76a4f33c611ec539b
     dependencies:
     - name: idf
       require: private
@@ -337,7 +337,7 @@ dependencies:
     source:
       registry_url: https://components.espressif.com
       type: service
-    version: 2.5.1
+    version: 2.7.0
   espressif/jsmn:
     component_hash: d80350c41bbaa827c98a25b6072df00884e72f54885996fab4a4f0aebce6b6c3
     dependencies:
@@ -426,9 +426,17 @@ dependencies:
       registry_url: https://components.espressif.com
       type: service
     version: 1.20.1
+  lvgl/lvgl:
+    component_hash: b702d642e03e95928046d5c6726558e6444e112420c77efa5fdb6650b0a13c5d
+    dependencies: []
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 9.3.0
 direct_dependencies:
 - espressif/arduino-esp32
 - idf
-manifest_hash: 66f0a9bec3b36ae1f3573b7170f942d46cfb870a01a1c197668b98e2db17d5dd
+- lvgl/lvgl
+manifest_hash: b7a103a43921b0a8d3b1f2d5cc46673a17443104926330bce3bc43a455d950c2
 target: esp32c3
 version: 2.0.0

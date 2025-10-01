@@ -4,7 +4,7 @@ extern "C" void ble_app_start(void);
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
-#include "epaper_interface.h"
+#include "lvgl_epaper.h"
 #include "esp_pm.h"
 #include "esp_sleep.h" 
 #include "esp_bt.h"
@@ -175,7 +175,9 @@ extern "C" void app_main(){
       
       // Here you can process the complete image data
       // For example: save to file, display on e-paper, etc.
-      epaper_draw_image(imageData.data(), imageData.size());
+      // If LVGL bridge is enabled, push the raw 1-bit framebuffer directly
+      bool ok = lvgl_epaper_draw_lv_image(imageData.data(), imageData.size());
+      Serial.print("lvgl_epaper_draw_lv_image returned: "); Serial.println(ok);
       //clear the image data for next transfer
       imageData.clear();
       return; // Don't add end marker to image data
@@ -199,6 +201,8 @@ extern "C" void app_main(){
   });
 
   BLEManager::instance().start();
+
+  lvgl_epaper_init();
   
   
   // Main loop - allow system to enter light sleep automatically
