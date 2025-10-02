@@ -98,8 +98,11 @@ static void lvgl_epaper_flush_cb(lv_display_t * disp, const lv_area_t * area, ui
 uint32_t get_millis() {
     return esp_timer_get_time()/1000;
 }
-
+bool static is_init = false;
 void lvgl_epaper_init(void) {
+    if (is_init) return;  // Already initialized
+    //log
+    ESP_LOGI("lvgl_epaper", "Initializing LVGL e-paper interface");
     lv_init();
     lv_tick_set_cb(get_millis);
     display.init(115200, true, 2, false);
@@ -125,7 +128,7 @@ void lvgl_epaper_init(void) {
     // Đặt nền của screen thành trắng
     lv_obj_set_style_bg_color(lv_screen_active(), lv_color_white(), 0);
     lv_obj_set_style_bg_opa(lv_screen_active(), LV_OPA_COVER, 0);
-    
+    is_init = true;
 }
 
 

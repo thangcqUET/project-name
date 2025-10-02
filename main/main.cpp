@@ -38,7 +38,6 @@ void enterDeepSleep(const char* reason) {
 extern "C" void app_main(){
   initArduino();
   Serial.begin(115200);
-  lvgl_epaper_init();
   // Check wakeup reason
   esp_sleep_wakeup_cause_t wakeup_reason = esp_sleep_get_wakeup_cause();
   switch(wakeup_reason) {
@@ -171,7 +170,8 @@ extern "C" void app_main(){
       Serial.print("Image transfer complete! Total size: ");
       Serial.print(imageData.size());
       Serial.println(" bytes");
-      
+      // init if not already done
+      lvgl_epaper_init();
       // Here you can process the complete image data
       // For example: save to file, display on e-paper, etc.
       // If LVGL bridge is enabled, push the raw 1-bit framebuffer directly
