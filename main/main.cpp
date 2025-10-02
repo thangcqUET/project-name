@@ -2,8 +2,6 @@
 extern "C" void ble_app_start(void);
 
 #include <BLEDevice.h>
-#include <BLEUtils.h>
-#include <BLEServer.h>
 #include "lvgl_epaper.h"
 #include "esp_pm.h"
 #include "esp_sleep.h" 
@@ -13,6 +11,7 @@ extern "C" void ble_app_start(void);
 #include "esp_system.h"
 #include "ble_manager.h"
 #include "esp_mac.h"
+#include "lvgl.h"
 
 #define DEVICE_NAME "E-Frame"
 #define WAKEUP_GPIO GPIO_NUM_0  // GPIO0 button for wakeup
@@ -39,7 +38,7 @@ void enterDeepSleep(const char* reason) {
 extern "C" void app_main(){
   initArduino();
   Serial.begin(115200);
-  
+  lvgl_epaper_init();
   // Check wakeup reason
   esp_sleep_wakeup_cause_t wakeup_reason = esp_sleep_get_wakeup_cause();
   switch(wakeup_reason) {
@@ -202,13 +201,11 @@ extern "C" void app_main(){
 
   BLEManager::instance().start();
 
-  lvgl_epaper_init();
-  
-  
   // Main loop - allow system to enter light sleep automatically
   unsigned long lastLog = 0;
   for(;;) {
-    delay(1000); // Check more frequently for timeout
+    lv_timer_handler();
+    delay(20); // Check more frequently for timeout
     
     // Check for connection timeout (5 minutes)
     if (!isConnected && (millis() - lastActivityTime > CONNECTION_TIMEOUT_MS)) {
